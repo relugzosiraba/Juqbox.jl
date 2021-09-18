@@ -751,10 +751,9 @@ end
 
 """
     wmat = wmatsetup(Ne, Ng)
-
-Build the default positive semi-definite weighting matrix W to calculate the 
+Build the default positive semi-definite weighting matrix W to calculate the
 leakage into higher energy forbidden states
- 
+
 # Arguments
 - `Ne::Array{Int64,1}`: Number of essential energy levels for each subsystem
 - `Ng::Array{Int64,1}`: Number of guard energy levels for each subsystem
@@ -762,7 +761,7 @@ leakage into higher energy forbidden states
 function wmatsetup(Ne::Array{Int64,1}, Ng::Array{Int64,1})
     Nt = Ne + Ng
     Ndim = length(Ne)
-    @assert(Ndim == 1 || Ndim == 2 || Ndim ==3, || Ndim ==4)
+    @assert(Ndim == 1 || Ndim == 2 || Ndim ==3 || Ndim ==4)
 
     Ntot = prod(Nt)
     w = zeros(Ntot)
@@ -875,7 +874,7 @@ function wmatsetup(Ne::Array{Int64,1}, Ng::Array{Int64,1})
 
             # normalize by the number of entries with w=1
             coeff = 10.0/nForb # was 1/nForb
-        end # if ndim == 3
+        #end # if ndim == 3
 
         elseif Ndim == 4
             fact = 1e-3 # for more emphasis on the "forbidden" states. Old value: 0.1
@@ -906,7 +905,7 @@ function wmatsetup(Ne::Array{Int64,1}, Ng::Array{Int64,1})
                                 end
 
                                 if i4 > Ne[4]   #only included if at a guard level
-                                    temp3 = fact^(Nt[4]-i4)
+                                    temp4 = fact^(Nt[4]-i4)
                                 end
 
                                 forbFact=1.0
@@ -917,7 +916,7 @@ function wmatsetup(Ne::Array{Int64,1}, Ng::Array{Int64,1})
                                 # if i2 == Nt[2] && i1<=Ne[1] && i3<=Ne3
                                 #   forbFact=100
                                 # end
-                                if i3 == Nt[3] && i1<=Ne[1] && i2<=Ne[2] && i4 == Nt[4]
+                                if i3 <= Ne[3] && i1<=Ne[1] && i2<=Ne[2] && i4 == Nt[4]
                                     forbFact=100
                                 end
 
@@ -941,6 +940,7 @@ function wmatsetup(Ne::Array{Int64,1}, Ng::Array{Int64,1})
     wmat = coeff * Diagonal(w) # turn vector into diagonal matrix
     return wmat
 end
+
 
 
 # Matrices for the Hamiltonian in rotation frame
