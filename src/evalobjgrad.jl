@@ -1,5 +1,3 @@
-# Test
-
 """
     params = objparams(Ne, Ng, T, Nsteps;
                         Uinit=Uinit, 
