@@ -680,13 +680,13 @@ if verbose
     end
     
     nlast = 1 + nsteps
-    println("Unitary test:")
-    println("Col   (1 - Vnrm)")
+    println("Unitary test 1, error in length of propagated state vectors:")
+    println("Col |   (1 - |psi|)")
     Vnrm ::Float64 = 0.0
     for q in 1:N
         Vnrm = usaver[:,q,nlast]' * usaver[:,q,nlast] + usavei[:,q,nlast]' * usavei[:,q,nlast]
         Vnrm = sqrt(Vnrm)
-        println("  ", q, " |     ", 1.0 - Vnrm)
+        println("  ", q, " |  ", 1.0 - Vnrm)
     end
 
     # output primary objective function (infidelity at final time)
@@ -724,9 +724,9 @@ if verbose
     
 end #if verbose
 
-# return to calling routine
+# return to calling routine (the order of the return arguments is somewhat inconsistent. At least add a description in the docs)
 if verbose && evaladjoint
-    return objfv, totalgrad, usaver+1im*usavei, mfidelityrot, dfdp
+    return objfv, totalgrad, usaver+1im*usavei, mfidelityrot, dfdp, wr1 - 1im*wi
 elseif verbose
     println("Returning from traceobjgrad with objfv, unitary history, fidelity")
     return objfv, usaver+1im*usavei, mfidelityrot
